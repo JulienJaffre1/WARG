@@ -8,13 +8,13 @@ val ktorVersion: String by rootProject.extra
 val koinVersion: String by rootProject.extra
 
 android {
-    namespace = "com.example.gamedb"
-    compileSdk = 33
+    namespace = "com.example.warg"
+    compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.gamedb"
-        minSdk = 33
-        targetSdk = 33
+        applicationId = "com.example.warg"
+        minSdk = 34
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
