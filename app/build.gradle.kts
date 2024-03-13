@@ -71,6 +71,7 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+    implementation("androidx.webkit:webkit:1.6.0")
 
     // Koin for Android
     implementation("io.insert-koin:koin-core:$koinVersion")
@@ -95,4 +96,9 @@ dependencies {
     implementation("io.ktor:ktor-client-json:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
     implementation("io.ktor:ktor-client-android:$ktorVersion")
+
+    implementation("com.squareup.picasso:picasso:2.8")
+
+    // Coil
+    implementation("io.coil-kt:coil-compose:2.6.0")
 }

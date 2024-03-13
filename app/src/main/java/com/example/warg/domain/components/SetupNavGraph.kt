@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.warg.domain.views.WargAuthentificationScreen
+import com.example.warg.domain.views.WargInscriptionScreen
 import com.example.warg.domain.views.WargLibraryScreen
 import com.example.warg.domain.views.WargSettingsScreen
 
@@ -39,6 +40,13 @@ fun SetupNavGraph(navHostController: NavHostController) {
                 navHostController = navHostController
             )
         }
+        composable(
+            route = Screen.WargInscription.route
+        ) {
+            WargInscriptionScreen(
+                navHostController = navHostController
+            )
+        }
     }
 }
 
@@ -46,4 +54,5 @@ sealed class Screen(val route: String) {
     object WargAuthentification : Screen("WargAuthentificationScreen")
     object WargLibrary : Screen("WargLibraryScreen")
     object WargSettings : Screen("WargSettings")
+    object WargInscription : Screen("WargInscription")
 }
