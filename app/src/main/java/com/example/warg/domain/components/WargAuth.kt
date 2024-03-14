@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,6 +30,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.warg.R
+import com.example.warg.domain.model.WargViewModel
+import org.koin.androidx.compose.getViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,12 +57,16 @@ fun WargAuth(modifier: Modifier, user : String, pass : String, userChange: (Stri
 
 @Composable
 fun WargTestAuth(username : String, password : String, navHostController: NavHostController) {
+    val wargViewModel = getViewModel<WargViewModel>()
+    val state by wargViewModel.viewState.collectAsState()
     val openAlertDialog = remember { mutableStateOf(false) }
-    val debug = true
+    val debug = false
 
     Button(
         onClick = {
-            if((username.equals("Jupiter") and password.equals("mars")) || debug) {
+            wargViewModel.accountConnectionSus(username, password)
+
+            if( ( !state.token.equals("")) || debug) {
                 navHostController.navigate(route = "${Screen.WargLibrary.route}")
             }
             else {

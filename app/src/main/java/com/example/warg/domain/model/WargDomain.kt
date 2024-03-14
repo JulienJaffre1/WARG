@@ -1,34 +1,30 @@
-package com.example.warg.data.api
+package com.example.warg.domain.model
 
 import kotlinx.serialization.Serializable
 
-@Serializable
-data class AccountDto(
+data class AccountDomain(
     val id: Int,
     val name: String,
     val password: String,
     val mail: String
 )
 
-@Serializable
-data class AccountSettingsDto(
+data class AccountSettingsDomain(
     val id: Int,
     val steamUser: String,
     val gogUser: String
 )
 
-@Serializable
-data class GamesDto (
-    val games: List<GameDto>? = listOf()
+data class GamesDomain (
+    val games: List<GameDomain>? = listOf()
 )
 
-@Serializable
-data class GameDto (
+data class GameDomain (
     val name: String,
     val imageUrl: String
 )
 
-@Serializable
-data class TokenDto (
+data class TokenDomain (
     val token: String
 )
+
