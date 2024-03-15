@@ -24,16 +24,23 @@ class WargApi (
     ) : KoinComponent {
 
     @OptIn(InternalAPI::class)
-    suspend fun accountConnectionAPI(mail: String, password: String): TokenDto {
+    suspend fun accountConnectionAPI(mail: String, password: String): TokenEntityDto {
         Log.d("WARG", "WARG API")
         return client.post("http://52.47.150.41:8080/api/v1/login/login") {
             headers.append(HttpHeaders.ContentType, "application/json")
             contentType(ContentType.Application.Json)
-            setBody("BITE")
-        }.body<TokenDto>()
+            setBody(AccountDto(0, "", password, mail))
+        }.body<TokenEntityDto>()
     }
 
-        /*suspend fun fetchWeather(city: String) : WeatherResultDto {
+    suspend fun accountCreationAPI(name: String, password: String, mail: String): HttpResponse {
+        return client.post("http://52.47.150.41:8080/api/v1/account") {
+            headers.append(HttpHeaders.ContentType, "application/json")
+            contentType(ContentType.Application.Json)
+            setBody(AccountDto(0, name, password, mail))
+        }.body()
+    }
+            /*suspend fun fetchWeather(city: String) : WeatherResultDto {
             return client.get("$baseUrl") {
                 url {
                     parameters.append("q", "$city, FR")

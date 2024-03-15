@@ -1,5 +1,6 @@
 package com.example.warg.domain.components
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,9 +30,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.example.warg.R
 import com.example.warg.domain.model.WargViewModel
+import kotlinx.coroutines.Delay
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,6 +62,7 @@ fun WargAuth(modifier: Modifier, user : String, pass : String, userChange: (Stri
     }
 }
 
+@OptIn(InternalCoroutinesApi::class)
 @Composable
 fun WargTestAuth(username : String, password : String, navHostController: NavHostController) {
     val wargViewModel = getViewModel<WargViewModel>()
@@ -64,14 +72,25 @@ fun WargTestAuth(username : String, password : String, navHostController: NavHos
 
     Button(
         onClick = {
-            wargViewModel.accountConnectionSus(username, password)
+            wargViewModel.viewModelScope.launch {
+                wargViewModel.accountConnectionSus(username, password)
+            }
 
-            if( ( !state.token.equals("")) || debug) {
-                navHostController.navigate(route = "${Screen.WargLibrary.route}")
+            while (state.isLoading) {
+
             }
-            else {
-                openAlertDialog.value = true
-            }
+
+            Log.d("WARG", "Auth " + state.token!!.token)
+
+                //state.token?.let { Log.d("WARG", "Auth " + it.token) }
+
+                if(state.token?.token?.isNotEmpty() == true) {
+                    navHostController.navigate(route = "WargLibraryScreen/" + state.token!!.token)
+                }
+                else {
+                    openAlertDialog.value = true
+                }
+
         }
     ) {
         Text(text = "Se connecter")

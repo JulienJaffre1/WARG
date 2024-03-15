@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.warg.data.api.WargApi
 import com.example.warg.data.core.Resource
 import com.example.warg.domain.model.TokenDomain
+import com.example.warg.domain.model.TokenEntityDomain
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.client.statement.readText
@@ -19,7 +20,8 @@ import org.json.JSONObject
 import org.koin.core.component.KoinComponent
 
 interface WargRepositoryInterface {
-    suspend fun accountConnection(mail: String, password: String): Flow<Resource<TokenDomain>>
+    suspend fun accountConnection(mail: String, password: String): Flow<Resource<TokenEntityDomain>>
+    suspend fun accountCreation(name: String, password: String, mail: String): Flow<Resource<String>>
 }
 
 fun CoroutineScope.launchPeriodicAsync(
@@ -40,20 +42,45 @@ class WargRepository (
     private val wargApi: WargApi
 ) : KoinComponent,
         WargRepositoryInterface {
-    override suspend fun accountConnection(mail: String, password: String): Flow<Resource<TokenDomain>> {
+    override suspend fun accountConnection(mail: String, password: String): Flow<Resource<TokenEntityDomain>> {
         return accountConnectionFlow(mail, password)
     }
 
-    private suspend fun accountConnectionFlow(mail: String, password: String): Flow<Resource<TokenDomain>> = flow {
+    private suspend fun accountConnectionFlow(mail: String, password: String): Flow<Resource<TokenEntityDomain>> = flow {
         emit(Resource.Loading())
         var result = wargApi.accountConnectionAPI(mail, password)
-        if(result.token.equals("")) {
+
+        Log.d("WARG", "Dans Flow : " + result.token)
+
+        if (result != null) {
             Log.d("WARG", "WARG Successful")
             println("Successful response")
 
-            emit(Resource.Success(result.toDomain()))
-        }
-        emit(Resource.Error(Throwable("Compte inexistant"),result.toDomain()))
+           //result = result!!
 
+
+
+            emit(Resource.Success(result.toDomain()!!))
+        }
+        //Log.d("WARG", "WARG not successful")
+        emit(Resource.Error(Throwable("Compte inexistant"),))
+    }
+
+    override suspend fun accountCreation(name: String, password: String, mail: String): Flow<Resource<String>> {
+        return accountCrationFlow(name, password, mail)
+    }
+
+    private suspend fun accountCrationFlow(name: String, password: String, mail: String): Flow<Resource<String>> = flow {
+        emit(Resource.Loading())
+        var result = wargApi.accountCreationAPI(name, password, mail)
+        Log.d("WARG", "Dans Flow creation : $result")
+
+        if(result.status.value in 200..299) {
+            Log.d("WARG", "WARG Successful")
+            println("Successful response")
+
+            emit(Resource.Success(result.bodyAsText()))
+        }
+        emit(Resource.Error(Throwable("Compte pas crée"),result.bodyAsText()))
     }
 }

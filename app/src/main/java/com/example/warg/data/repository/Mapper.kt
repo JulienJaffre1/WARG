@@ -5,11 +5,13 @@ import com.example.warg.data.api.AccountSettingsDto
 import com.example.warg.data.api.GameDto
 import com.example.warg.data.api.GamesDto
 import com.example.warg.data.api.TokenDto
+import com.example.warg.data.api.TokenEntityDto
 import com.example.warg.domain.model.AccountDomain
 import com.example.warg.domain.model.AccountSettingsDomain
 import com.example.warg.domain.model.GameDomain
 import com.example.warg.domain.model.GamesDomain
 import com.example.warg.domain.model.TokenDomain
+import com.example.warg.domain.model.TokenEntityDomain
 
 fun AccountDto.toDomain() = AccountDomain(
     id = this.id,
@@ -34,5 +36,9 @@ fun GameDto.toDomain() = GameDomain(
 )
 
 fun TokenDto.toDomain() = TokenDomain(
+    token = this.token.toDomain()
+)
+
+fun TokenEntityDto.toDomain() = TokenEntityDomain(
     token = this.token
 )

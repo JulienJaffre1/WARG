@@ -1,5 +1,6 @@
 package com.example.warg.domain.model
 
+import com.example.warg.data.api.TokenEntityDto
 import kotlinx.serialization.Serializable
 
 data class AccountDomain(
@@ -24,7 +25,11 @@ data class GameDomain (
     val imageUrl: String
 )
 
-data class TokenDomain (
+data class TokenDomain(
+    val token: TokenEntityDomain
+)
+
+data class TokenEntityDomain (
     val token: String
 )
 

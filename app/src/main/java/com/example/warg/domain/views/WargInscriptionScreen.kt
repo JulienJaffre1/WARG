@@ -1,5 +1,6 @@
 package com.example.warg.domain.views
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,8 +27,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.example.warg.domain.components.Screen
+import com.example.warg.domain.model.WargViewModel
+import kotlinx.coroutines.launch
+import org.koin.androidx.compose.getViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,6 +44,8 @@ fun WargInscriptionScreen(navHostController: NavHostController) {
     val openAlertCreer = remember { mutableStateOf(false) }
     val openAlertErreur = remember { mutableStateOf(false) }
     var textErreur = remember { mutableStateOf("") }
+    val wargViewModel = getViewModel<WargViewModel>()
+    val state by wargViewModel.viewState.collectAsState()
 
     Row(
         modifier = Modifier.fillMaxSize(),
@@ -97,6 +105,10 @@ fun WargInscriptionScreen(navHostController: NavHostController) {
                         if(utilisateur != "" && utilisateur.length <= 22 && utilisateur.length > 1) {
                             if(mail.contains("@") && mail != "") {
                                 if(password == password2 && password != "" && password2 != "") {
+                                    wargViewModel.viewModelScope.launch {
+                                       //wargViewModel.accountCreationSus(utilisateur, password, mail)
+                                        wargViewModel.accountCreationSus("Julien", "1234", "julien@gmail.com")
+                                    }
                                     openAlertCreer.value = true
                                 }
                                 else {

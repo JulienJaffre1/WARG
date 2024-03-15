@@ -1,5 +1,6 @@
 package com.example.warg.domain.views
 
+import android.util.Log
 import android.widget.ImageButton
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -22,12 +23,13 @@ import com.example.warg.domain.components.WargGameList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WargLibraryScreen (navHostController: NavHostController) {
+fun WargLibraryScreen (navHostController: NavHostController, token: String) {
     Row {
         Column(
             horizontalAlignment = Alignment.Start,
         ) {
             WargGameList()
+            Log.d("WARG", "Library : $token")
         }
         TextButton(onClick = {  navHostController.navigate(route = "${Screen.WargSettings.route}") }) {
             Image(painter = painterResource(id = R.drawable.settings), contentDescription = stringResource(id = R.string.setting),

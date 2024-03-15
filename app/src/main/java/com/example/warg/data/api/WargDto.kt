@@ -30,5 +30,10 @@ data class GameDto (
 
 @Serializable
 data class TokenDto (
+    val token: TokenEntityDto
+)
+
+@Serializable
+data class TokenEntityDto(
     val token: String
 )

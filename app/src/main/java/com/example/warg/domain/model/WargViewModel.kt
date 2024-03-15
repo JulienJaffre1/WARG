@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 data class WargViewModelState(
     var account: AccountDomain? = null,
-    var token: String? = null,
+    var token: TokenEntityDomain? = null,
     var accountSettingsDomain: AccountSettingsDomain? = null,
     var gamesDomain: GamesDomain? = null,
     var isLoading: Boolean = false
@@ -27,11 +27,27 @@ open class WargViewModel(private val repository: WargRepositoryInterface) : View
         viewModelScope.launch(context = Dispatchers.IO) {
             val flow = repository.accountConnection(mail, password)
 
-            Log.d("WARG", "WARG View")
+            Log.d("WARG", "WARG Connection view")
 
             flow.collect {
                 _viewState.value = WargViewModelState(
-                    token = it.data?.token,
+                    token = it.data,
+                    isLoading = it.status == Status.LOADING
+                )
+            }
+        }
+    }
+
+    fun accountCreationSus(name: String, password: String, mail: String) = accountCreation(name, password, mail)
+
+    private fun accountCreation(name: String, password: String, mail: String) {
+        viewModelScope.launch(context = Dispatchers.IO) {
+            val flow = repository.accountCreation(name, password, mail)
+
+            Log.d("WARG", "WARG cration view")
+
+            flow.collect {
+                _viewState.value = WargViewModelState(
                     isLoading = it.status == Status.LOADING
                 )
             }

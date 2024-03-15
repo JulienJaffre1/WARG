@@ -1,6 +1,7 @@
 package com.example.warg
 
 import android.os.Bundle
+import android.util.Log
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.ComponentActivity
@@ -32,6 +33,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navHostController = rememberNavController()
+                    Log.d("Start", "Début de l'exe")
                     SetupNavGraph(navHostController = navHostController)
                 }
             }
